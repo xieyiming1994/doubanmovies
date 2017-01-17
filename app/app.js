@@ -11,105 +11,49 @@
  */
 ;(function() {
 
+  angular.module("dbMVP", ["ngRoute"]).config([
+    '$routeProvider', 
+    '$locationProvider', 
+    function($routeProvider, $locationProvider){
+            // routes
+      $routeProvider
+        .when('/hot', {
+          templateUrl: 'views/hot/hot.html',
+          controller: 'HotController',
+          controllerAs: 'hot'
+        })
+        .when('/future', {
+          templateUrl: 'views/future/future.html',
+          controller: 'FutureController',
+          controllerAs: 'future'
+        })
+        .when('/top', {
+          templateUrl: 'views/top/top.html',
+          controller: 'TopController',
+          controllerAs: 'top'
+        })
+        .when("/search", {
+          templateUrl: 'views/search/search.html',
+          controller: 'SearchController',
+          controllerAs: 'search'
+        })
+        .when("/subject/:id", {
+          templateUrl: 'views/detail/detail.html',
+          controller: 'DetailController',
+          controllerAs: 'detail'
+        })
+        .otherwise({
+          redirectTo: '/hot'
+        });
 
-  /**
-   * Definition of the main app module and its dependencies
-   */
-  angular
-    .module('boilerplate', [
-      'ngRoute'
-    ])
-    .config(config);
-
-  // safe dependency injection
-  // this prevents minification issues
-  config.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider'];
-
-  /**
-   * App routing
-   *
-   * You can leave it here in the config section or take it out
-   * into separate file
-   * 
-   */
-  function config($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
-
-    $locationProvider.html5Mode(false);
-
-    // routes
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/home.html',
-        controller: 'MainController',
-        controllerAs: 'main'
-      })
-      .when('/contact', {
-        templateUrl: 'views/contact.html',
-        controller: 'MainController',
-        controllerAs: 'main'
-      })
-      .when('/setup', {
-        templateUrl: 'views/setup.html',
-        controller: 'MainController',
-        controllerAs: 'main'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-
-    $httpProvider.interceptors.push('authInterceptor');
-
-  }
+  }])
 
 
-  /**
-   * You can intercept any request or response inside authInterceptor
-   * or handle what should happend on 40x, 50x errors
-   * 
-   */
-  angular
-    .module('boilerplate')
-    .factory('authInterceptor', authInterceptor);
+  angular.module("dbMVP").run([
+    '$rootScope', 
+    '$location', function($rootScope, $location) {
 
-  authInterceptor.$inject = ['$rootScope', '$q', 'LocalStorage', '$location'];
-
-  function authInterceptor($rootScope, $q, LocalStorage, $location) {
-
-    return {
-
-      // intercept every request
-      request: function(config) {
-        config.headers = config.headers || {};
-        return config;
-      },
-
-      // Catch 404 errors
-      responseError: function(response) {
-        if (response.status === 404) {
-          $location.path('/');
-          return $q.reject(response);
-        } else {
-          return $q.reject(response);
-        }
-      }
-    };
-  }
-
-
-  /**
-   * Run block
-   */
-  angular
-    .module('boilerplate')
-    .run(run);
-
-  run.$inject = ['$rootScope', '$location'];
-
-  function run($rootScope, $location) {
-
-    // put here everything that you need to run on page load
-
-  }
+  }])
 
 
 })();
